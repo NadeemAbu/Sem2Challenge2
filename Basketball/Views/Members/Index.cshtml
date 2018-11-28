@@ -1,0 +1,73 @@
+﻿@using Basketball.Models
+@model AspUserModelView
+
+@{
+                /**/
+
+                ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AspNetUser.Email)
+        </th>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.AspNetUser.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AspNetUser.Roles)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Game.CourtFees)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.AspNetUsers)
+    {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Email)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.UserName)
+    </td>
+    <td>
+       @if(item.Roles == 1)
+       {
+           <p>Manager</p>
+       }
+       else if(item.Roles == 2)
+       {
+           <p>Team Member</p>
+       }
+       else
+       {
+           <p>Member Pending</p>
+       }
+    </td>
+    <td>
+        @{decimal? totalSpend = 0; }
+        @foreach (Game g in Model.Games)
+        {
+            if (g.WhoPaid == item.Email)
+            {
+                totalSpend += g.CourtFees;
+            }
+        }
+        @totalSpend
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+    </td>
+</tr>
+}
+
+</table>
